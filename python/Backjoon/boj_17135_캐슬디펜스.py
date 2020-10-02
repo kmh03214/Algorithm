@@ -16,18 +16,15 @@ for i in range(N):
     a = list(map(int,read().split()))
     for j in range(M):
         if a[j] == 1:
-            enemy_positions.append((i+1,j))
+            enemy_positions.append((N-i,j))
 
 sol = []
 for archers_pos in archers_positions:
     copy_enemy_positions = enemy_positions.copy()
     cnt = 0
-    print(archers_pos)
     while copy_enemy_positions:
         will_remove_enemy = []
-        print("state:",copy_enemy_positions)
         for a_pos in archers_pos:
-            print("archer:",a_pos)
             near_enemy = []
             dist1 = 0
             for e_pos in copy_enemy_positions:
@@ -36,7 +33,6 @@ for archers_pos in archers_positions:
                     near_enemy.append((dist, e_pos))
                     dist1 = dist
             near_enemy.sort(key = lambda x: (x[0],x[1][1]) )
-            print("remove:",near_enemy)
 
             try:
                 will_remove_enemy.append(near_enemy[0])
@@ -56,8 +52,7 @@ for archers_pos in archers_positions:
             else:
                 tmp.append([copy_enemy_positions[i][0]-1,copy_enemy_positions[i][1]])
         copy_enemy_positions = tmp
-        print()
         
     sol.append(cnt)
-print(sol)       
+print(max(sol))       
 
