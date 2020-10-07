@@ -11,18 +11,13 @@ def div(x,y,d1,d2): # d1,d2 >= 1, 1<= x < x+d1+d2 <= N, 1<= y-d1 < y < y+d2 <= N
     for k in range(d2+1):
         for i in range(d1+1-k):
             if (x+i+k,y-i) not in check:
-
                 check[(x+i+k,y-i)] = 5
             if (x+d2+i,y+d2-i-k) not in check:
-
                 check[(x+d2+i,y+d2-i-k)] = 5
-
         for i in range(d2+1-k):
             if (x+i+k,y+i) not in check:
-
                 check[(x+i+k,y+i)] = 5
             if (x+d1+i,y-d1+i+k) not in check:
-
                 check[(x+d1+i,y-d1+i+k)] = 5
 
     for r in range(N):
