@@ -145,6 +145,3 @@ for level in range((N//2)):
         solution += sol
 
 print(solution)
-        
-        
-        
