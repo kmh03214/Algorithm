@@ -36,7 +36,7 @@ def priority(d):
         else:
             return 'B'
 
-def move(mat, pos, d): # red or blue , direction
+def move(pos, d): # red or blue , direction
     color = mat[pos[0]][pos[1]]
     mat[pos[0]][pos[1]] = '.' # 이동할것이기 때문에 .으로 비워줌
     q, dx, dy = [pos], [0,0,1,-1], [1,-1,0,0]
@@ -57,43 +57,53 @@ def move(mat, pos, d): # red or blue , direction
     else:
         blue = (r,c)
     return 0
+sol = []
 
-# 중복허용 순열인데 앞에 나온건 다시 안쓴다.
-def main():
-    for depth in range(1,11):
-        product = itertools.product([0,1,2,3],repeat = depth)
-        sol = []
+direction = [0,1,2,3]
+pool = []
+def dfs(arr,before,depth):
+    if depth == 10:
+        yield pool
+        return
 
-        for prod in product:
-            cnt,before_dir = 0,-1
-            mat = []
-            for ma in m:
-                mat.append(ma.copy())
-            
-            global red, blue
-            red, blue = red_, blue_
+    for i in arr:
+        if i != before:
+            pool.append(i)
+            for next in dfs(arr,i,depth+1):
+                yield next
+            pool.pop()
+for prod in dfs(direction,10,0):
+    cnt,before_dir = 0,-1
+    mat = []
+    for ma in m:
+        mat.append(ma.copy())
+    
+    global red, blue
+    red, blue = red_, blue_
 
-            for direction in prod:
-                if direction == before_dir: # 현재 방향이 이전에 갔던 방향하고 동일하면 탐색 중지
-                    break
-                before_dir = direction
-                who = priority(direction)
-                cnt += 1
-                if who == 'R': # R, B
-                    ret_r = move(mat,red,direction)
-                    ret_b = move(mat,blue,direction)
-                    if ret_r == 1 and ret_b == 0:
-                        return depth
-                else: # B, R
-                    ret_b = move(mat,blue,direction)
-                    ret_r = move(mat,red,direction)
-                    if ret_r == 1 and ret_b == 0:
-                        return depth
-                if ret_b == 1:
-                    return # 실패 더 이상 탐색할 필요 없음.
-
-sol = main()
+    for direction in prod:
+        if direction == before_dir: # 현재 방향이 이전에 갔던 방향하고 동일하면 탐색 중지
+            break
+        before_dir = direction
+        who = priority(direction)
+        cnt += 1
+        if who == 'R': # R, B
+            ret_r = move(red,direction)
+            ret_b = move(blue,direction)
+            if ret_r == 1 and ret_b == 0:
+                sol.append(cnt)
+                break
+        else: # B, R
+            ret_b = move(blue,direction)
+            ret_r = move(red,direction)
+            if ret_r == 1 and ret_b == 0:
+                sol.append(cnt)
+                break
+        if ret_b == 1:
+            break # 실패 더 이상 탐색할 필요 없음.
 if sol:
-    print(sol)
+    print(min(sol))
 else:
     print(-1)
+
+
