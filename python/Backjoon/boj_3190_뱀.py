@@ -41,7 +41,7 @@ class snake():
         d = self.direction
         head = self.head
         tail = self.tail
-        print(self.next_tail)
+        #print(self.next_tail)
         if d == 0:
             head = ( head[0]-1, head[1] )
             if head in self.me: # 자기자신과 부딪힌 경우
@@ -128,7 +128,7 @@ for i in range(len(move_order)):
     ret = s.move()
     s.direction = where(s.direction,order)
     if ret != 'go':
-        print(ret)
+        #print(ret)
         print(i)
         break
 
