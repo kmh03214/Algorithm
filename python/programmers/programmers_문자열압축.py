@@ -13,6 +13,4 @@ def compress(s,length,ret_s):
     return len(ret_s)
 
 def solution(s):
-    return min([compress(s,i,'') for i in range(1,(len(s)//2) +1)])
-
-solution('a')
+    return min([compress(s,i,'') for i in range(1,(len(s)//2) +1)]) if len(s) != 1 else 1
