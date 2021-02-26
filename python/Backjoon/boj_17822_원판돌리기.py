@@ -13,13 +13,13 @@ for i in range(T):
 
 def rotation(x,d,k):
     if d == 0: # ->
-        for i in range(1,M+1):
+        for i in range(1,N+1):
             row_idx = x*i-1
             if row_idx > N-1:
                 break
             mat[row_idx] = mat[row_idx][M-k:] + mat[row_idx][:M-k]
     else:
-        for i in range(1,M+1):
+        for i in range(1,N+1):
             row_idx = x*i-1
             if row_idx > N-1:
                 break
