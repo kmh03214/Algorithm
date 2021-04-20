@@ -1,89 +1,79 @@
 import sys
 read = sys.stdin.readline
-mat = []
-fish_position = [0]*17
-direction = [(-1,0),(-1,-1),(0,-1),(1,-1),(1,0),(1,1),(0,1),(-1,1)]
-
-for i in range(4):
-    a = list(map(int, read().split()))
-    b = []
-    for j in range(4):
-        fish_position[a[2*j]] = (i,j)
-        b.append((a[2*j],a[2*j+1]))
-    mat.append(b)
-
-shark = (0,mat[0][0][1])
-shark_pos = (0,0)
-shark_size = mat[0][0][0]
-fish_position[mat[0][0][0]] = 0
-mat[0][0] = shark
-
-sol = []
-def shark_move():
-    q = []
-    r,c = shark_pos[0],shark_pos[1]
-    for i in range(4):
-        dx,dy = direction[shark[1]-1]
-        r,c = r+dx, c+dy
-        if 0 <= r < 4 and 0 <= c < 4:
-            q.append((r,c))
-    return q
-
-def fish_move(ma,fish_pos,shark,shark_size,shark_pos):
-    m,f_pos = [], fish_pos.copy()
-    for m_ in ma:
-        m.append(m_.copy())
-    for pos in f_pos:
-        if pos == 0:
+dirs = {
+    1:(-1,0),2:(-1,-1),3:(0,-1),4:(1,-1),
+    5:(1,0),6:(1,1),7:(0,1),0:(-1,1)
+}
+fishes = {}
+def fish_move(mat_c):
+    # 번호 작은순
+    for num in range(1,17): # 1부터 16번까지 없으면 다음번호
+        if num not in fishes:
             continue
-        r,c = pos[0],pos[1]
-        f_num, d = m[r][c] # 물고기의 현재 번호 및 방향
+        r,c,d = fishes[num]
         for i in range(8):
-            dx,dy = direction[(d+i)%8-1]
-            nr,nc = r+dx, c+dy
-            if 0 <= nr < 4 and 0 <= nc < 4 and m[nr][nc][0] != shark[0]: # 이동할 수 있는경우
-                if f_pos[m[nr][nc][0]]: # 물고기가 있다면
-                    f_pos[f_num], f_pos[m[nr][nc][0]] = f_pos[m[nr][nc][0]], f_pos[f_num]
-                    m[r][c], m[nr][nc] = m[nr][nc], m[r][c]
+            nr,nc = r + dirs[(d+i)%8][0], c + dirs[(d+i)%8][1]
+            if 0<= nr <4 and 0 <= nc < 4 and mat_c[nr][nc][0] != -1: # 격자내부랑 상어가 아니면
+                num1,nd = mat_c[nr][nc][0], mat_c[nr][nc][1] # 바꿀 물고기 번호
+                mat_c[nr][nc], mat_c[r][c] = mat_c[r][c], mat_c[nr][nc] # 위치 교환
+                mat_c[nr][nc] = (num, (d + i) % 8)
+                if mat_c[r][c][0] != 0:
+                    fishes[num] = (nr,nc,(d+i)%8)
+                    fishes[num1] = (r,c,nd)
                 else:
-                    m[r][c], m[nr][nc] = m[nr][nc], m[r][c]
+                    fishes[num] = (nr,nc,(d+i)%8)
+                    if num1 != 0:
+                        del fishes[num1]
                 break
-    
-    q = shark_move()
-    print(q)
-    if q:
-        for s_pos in q:
-            m[shark_pos[0]][shark_pos[1]] = 
-            sr,sc = shark_pos = s_pos
-            fish_num, fish_d = m[sr][sc]
-            shark = (0,m[sr][sc][1])
-            m[sr][sc] = shark
-            shark_size += m[sr][sc][0]
-            print(shark_pos,shark,shark_size)
 
-            fish_move(m,f_pos,shark,shark_size,shark_pos)
+def simulation(ma,shark,eat):
+    global fishes
+    mat_c = []
+    for m in ma:
+        mat_c.append(m.copy())
+    fish_move(mat_c)
 
-            m[sr][sc] = fish_num, fish_d
-            shark_size -= fish_num
-    else:
-        sol.append(shark_size)
+    shark_nomi = []
+    sr,sc,sd = shark[0],shark[1],shark[2]
+    for i in range(3): # 최대 3칸이동
+        nsr,nsc = sr+ (i+1)*dirs[sd][0], sc + (i+1)*dirs[sd][1]
+        if 0<= nsr < 4 and 0 <= nsc <4 and mat_c[nsr][nsc][0] != 0: # 빈칸이 아니면
+            shark_nomi.append((nsr,nsc))
+
+    if not shark_nomi: # 비어있으면
+        sols.append(eat)
         return
 
+    for s_pos in shark_nomi:
+        nsr,nsc = s_pos[0],s_pos[1]
+        remember = mat_c[nsr][nsc] # 먹은 물고기 정보, num,dir
+        remember_fishes = fishes.copy()
+        mat_c[nsr][nsc] = (-1,remember[1])
+        mat_c[sr][sc] = (0,0)
+        if remember[0] != 0:
+            del fishes[remember[0]]
 
 
+        simulation(mat_c,(nsr,nsc,remember[1]), eat+remember[0])
+        mat_c[nsr][nsc] = (remember[0],remember[1]) # 먹은 물고기 정보 복구
+        mat_c[sr][sc] = (-1,sd)
+        fishes = remember_fishes
 
-    #fish_move(m,f_pos,shark)
-    
-
-fish_move(mat,fish_position,shark,shark_size,shark_pos)
-shark_move()
-            
-
-
-
-        
+mat = []
+for i in range(4):
+    a = list(map(int,read().split()))
+    aa = []
+    for j in range(4):
+        aa.append( (a[2*j],a[2*j+1]) ) # 번호 / 방향
+        fishes[a[2*j]] = (i,j,a[2*j+1]) # 번호 : 좌표 / 방향
+    mat.append(aa)
 
 
-    
-    
+sols = []
+eat,sd = mat[0][0][0],mat[0][0][1]
+del fishes[eat] # 먹힘
+mat[0][0] = (-1,sd) # 상어 == -1
+shark = (0,0,sd)
 
+simulation(mat,shark,eat)
+print(max(sols))
