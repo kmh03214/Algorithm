@@ -12,8 +12,9 @@ belt = [[0,i] for i in map(int,read().split())]
 def check(robot):
     if robot[-1][0]:
         robot[-1] = [0,robot[-1][1]]
-time,fg = 0,0
-while sum([1 for b in belt if b[1] == 0]) < K:
+time,fg,cnt = 0,0,0
+
+while cnt < K:
     belt = [belt[-1]] + belt[:-1]
     robot, belt = belt[:N], belt[N:]
     check(robot)
@@ -21,10 +22,14 @@ while sum([1 for b in belt if b[1] == 0]) < K:
     for i in range(len(robot)-2,-1,-1):
         if robot[i][0] == 1 and robot[i+1][1] > 0 and robot[i+1][0] == 0:
             robot[i][0] ,robot[i+1] = 0, [1,robot[i+1][1]-1]
+            if robot[i+1][1] == 0:
+                cnt += 1
     check(robot)
 
     if not robot[0][0] and robot[0][1] > 0:
         robot[0] = [1,robot[0][1]-1]
+        if robot[0][1] == 0:
+            cnt += 1
     belt = robot+belt
     
 

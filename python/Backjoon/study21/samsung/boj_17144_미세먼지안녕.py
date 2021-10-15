@@ -35,7 +35,6 @@ def wind(arr):
         mat[sx][sy], mat[nx][ny], dust[(nx,ny)] = mat[nx][ny], mat[sx][sy], mat[sx][sy]
     mat[sx][sy], dust[(sx,sy)] = 0, 0
     
-
 while time != T:
     next_dust = {}
     for x,y in dust:
