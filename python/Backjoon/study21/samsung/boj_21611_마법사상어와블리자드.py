@@ -33,40 +33,53 @@ def sorting(mat):
     for x,y in arr:
         if mat[x][y]:
             tmp.append(mat[x][y])
-    
-    while True:
-        bef, cnt, next_tmp, fg = tmp[0], 0, [], 1
+    if tmp:
+        while True:
+            if not tmp:
+                break
+            bef, cnt, next_tmp, fg = tmp[0], 0, [], 1
+            
+            for i,v in enumerate(tmp):
+                if bef == v:
+                    cnt += 1
+                else:
+                    if cnt >= 4:
+                        sol += (bef*cnt)
+                        fg,cnt,bef = 0,1,v
+                        continue
+                    next_tmp += [bef]*cnt
+                    cnt = 1
+                    bef = v
+            if cnt < 4:
+                next_tmp += [bef]*cnt
+            else:
+                fg = 0
+                sol += (bef*cnt)
+
+            if fg:
+                break
+            tmp = next_tmp
+    if tmp:
+        bef,cnt,next_tmp = tmp[0],0,[]
         for i,v in enumerate(tmp):
+            if len(next_tmp) >= N*N-2:
+                break
             if bef == v:
                 cnt += 1
             else:
-                if cnt >= 4:
-                    sol += (bef*cnt)
-                    fg,cnt,bef = 0,1,v
-                    continue
-                next_tmp += [bef]*cnt
-                cnt = 1
-                bef = v
-        if cnt < 4:
-            next_tmp += [bef]*cnt
-        if fg:
-            break
-        tmp = next_tmp
-    
-    bef,cnt,next_tmp = tmp[0],0,[]
-    for i,v in enumerate(tmp):
-        if len(next_tmp) >= N*N-2:
-            break
-        if bef == v:
-            cnt += 1
-        else:
+                next_tmp.append(cnt)
+                next_tmp.append(bef)
+                bef,cnt = v,1
+        if not next_tmp and cnt:
             next_tmp.append(cnt)
             next_tmp.append(bef)
-            bef,cnt = v,1
-    tmp = next_tmp
+        
+        if next_tmp and len(next_tmp) < N*N-2 and cnt:
+            next_tmp.append(cnt)
+            next_tmp.append(bef)
+        tmp = next_tmp
+
     for i,val in enumerate(tmp):
-        if not tmp[i]:
-            break
         next_mat[arr[i][0]][arr[i][1]] = tmp[i]
     return next_mat
 
@@ -75,5 +88,4 @@ for d,s in magic:
     mat = sorting(mat)
 
 print(sol)
-
 
