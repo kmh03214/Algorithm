@@ -26,3 +26,15 @@ for per in permutations(orders):
         rotation(r-1,c-1,s)
     sol = min(sol, min([sum(m) for m in mat_]))
 print(sol)
+
+# def rotation(mat,r,c,z):
+#     # 1,8,16,24 -> ((z-1)*2)*4
+#     dxy = [(0,1),(1,0),(0,-1),(-1,0)]
+#     for zi in range(z+1):
+#         x,y = r-(zi),c-(zi)
+#         for j in range(4):
+#             for i in range(2*(zi)):
+#                 nx,ny = x + dxy[j][0], y + dxy[j][1]
+#                 mat[nx][ny], mat[r-(zi)][c-(zi)] = mat[r-(zi)][c-(zi)], mat[nx][ny]
+#                 x, y = nx, ny
+#     return mat
