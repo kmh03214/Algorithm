@@ -40,6 +40,7 @@ for test in range(1,T+1):
                 stairs.append((i,j))
         mat.append(a)
     sol = float('inf')
+    
     for s1,s2 in powerset(persons):
         for num in range(2):
             sol = min(sol,max(down(num%2, s1),down((num+1)%2,s2)))

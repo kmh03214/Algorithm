@@ -44,4 +44,3 @@ if not start:
 else:
     print(time)
     print(len(start))
-

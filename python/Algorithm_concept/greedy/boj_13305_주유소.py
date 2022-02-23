@@ -5,8 +5,8 @@
 import sys
 read = sys.stdin.readline
 N = int(read())
-dist = list(map(int,read().split()))
-oil_price = list(map(int,read().split()))
+dist = [*map(int,read().split())]
+oil_price = [*map(int,read().split())]
 oil_price.pop()
 m, before, sol = min(oil_price), 10000000001 ,0
 
@@ -20,4 +20,3 @@ for i in range(len(oil_price)):
         before = oil_price[i]
         sol += before*dist[i]
 print(sol)
-

@@ -3,30 +3,34 @@ read = sys.stdin.readline
 class heapq():
     def __init__(self, arr):
         self.arr = arr
-        self.heapify()
+        for i in range(len(arr)):
+            self.heappush(arr[i])
     
-    def heapify(self):
+    def heapify(self,i):
         #            0
         #      1            2
         #   3     4      5     6
         #  7 8   9 10  11 12 13 14
-        for i in range(len(self.arr)//2):
-            if 2*i+2 < len(self.arr):
-                root = self.arr[i]
-                left = self.arr[2*i+1]
-                right = self.arr[2*i+2]
-                if root > left:
-                    self.arr[i],self.arr[2*i+1] = self.arr[2*i+1],self.arr[i]
-                    root,left = left,root
-                if root > right:
-                    self.arr[i],self.arr[2*i+2] = self.arr[2*i+2],self.arr[i]
-                    root,right = right,root
-            else:
-                root = self.arr[i]
-                left = self.arr[2*i+1]
-                if root > left:
-                    self.arr[i],self.arr[2*i+1] = self.arr[2*i+1],self.arr[i]
-                    root,left = left,root
+        if 2*i+2 < len(self.arr):
+            root = self.arr[i]
+            left = self.arr[2*i+1]
+            right = self.arr[2*i+2]
+
+            if root > left:
+                self.arr[i],self.arr[2*i+1] = self.arr[2*i+1],self.arr[i]
+                root,left = left,root
+            if root > right:
+                self.arr[i],self.arr[2*i+2] = self.arr[2*i+2],self.arr[i]
+                root,right = right,root
+        else:
+            if len(self.arr) <= 1:
+                return
+            root = self.arr[i]
+            left = self.arr[2*i+1]
+            if root > left:
+                self.arr[i],self.arr[2*i+1] = self.arr[2*i+1],self.arr[i]
+                root,left = left,root
+    
     def heappush(self,a):
         self.arr.append(a)
         idx = len(self.arr)-1
@@ -42,7 +46,7 @@ class heapq():
         if self.arr:
             self.arr[0], self.arr[-1] = self.arr[-1], self.arr[0]
             ret = self.arr.pop()
-            self.heapify()
+            self.heapify(0)
             return ret
         else:
             return 0
@@ -66,3 +70,5 @@ for i in range(N):
 # print(heapq.arr)
 # for i in range(len(heapq.arr)):
 #     print(heapq.heappop())
+
+

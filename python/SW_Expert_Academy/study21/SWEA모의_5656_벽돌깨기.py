@@ -1,4 +1,4 @@
-from itertools import combinations_with_replacement
+from itertools import product
 
 dd = [(0,1),(1,0),(0,-1),(-1,0)]
 def drop_the_beat(mat_c, x):
@@ -13,7 +13,7 @@ def drop_the_beat(mat_c, x):
     while target:
         Next = []
         for v in target:
-            L = mat_c[v[0]][v[1]]-1
+            mat_c[v[0]][v[1]], L = 0, mat_c[v[0]][v[1]]-1
             for i in range(4):
                 for j in range(L):
                     nx,ny = v[0]+ (j+1)*dd[i][0], v[1]+(j+1)*dd[i][1]
@@ -21,9 +21,6 @@ def drop_the_beat(mat_c, x):
                         Next.append((nx,ny))
                         check[(nx,ny)] = 1
         target = Next
-    for ch in check:
-        mat_c[ch[0]][ch[1]] = 0
-
     next_mat = []
     for m in zip(*mat_c):
         arr = [i for i in m if i != 0]
@@ -35,8 +32,7 @@ for test in range(1,T+1):
     N,W,H = map(int,input().split())
     mat, arr, sol = [list(map(int,input().split())) for i in range(H)], [i for i in range(W)], W*H
 
-    for combi in combinations_with_replacement(arr,N):
-        combi = [2,2,6]
+    for combi in product(arr,repeat=N):
         mat_c = [m.copy() for m in mat]
         for c in combi:
             mat_c = drop_the_beat(mat_c, c)

@@ -47,5 +47,3 @@ for test in range(1,T+1):
         for i in range(4):
             sol = max(sol,game(x,y,i))
     print("#%d %d"%(test, sol))
-
-

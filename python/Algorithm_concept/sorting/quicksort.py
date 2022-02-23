@@ -39,6 +39,7 @@ arr = [int(read()) for i in range(N)]
     
 #     quick_sort(l, p-1 ,l) # (왼) p 오
 #     quick_sort(p+1, r ,p+1) #  왼 p (오)
+
 def quick_sort(array, start, end):
     if start >= end: # 원소가 1개인 경우 종료
         return
